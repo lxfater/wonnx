@@ -513,6 +513,12 @@ impl GpuModel {
             let source_identifier = node_input.source_node.identifier();
             let input_tensor = {
                 let source_outputs = &node_outputs[&source_identifier];
+                if source_outputs.get(node_input.output_index).is_none() {
+                    println!("Debug: About to trigger GpuError::OutputMissing");
+                    // 或者
+                    // panic!("Debug: About to trigger GpuError::OutputMissing");
+                }
+                
                 source_outputs
                     .get(node_input.output_index)
                     .ok_or(GpuError::OutputMissing(node_input.output_index))?
